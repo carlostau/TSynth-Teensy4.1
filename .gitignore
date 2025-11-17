@@ -1,0 +1,13 @@
+# PlatformIO
+.pio/
+.vscode/
+.pioenvs/
+.piolibdeps/
+lib/readme.txt
+
+# Build artifacts
+*.o
+*.elf
+*.hex
+*.bin
+*.map
