@@ -18,10 +18,10 @@ public:
   void setDelayMs(float delayMs);
   
 private:
-  static const int MAX_DELAY_SAMPLES = 96000;  // 2 seconds at 48kHz
+  static const int MAX_DELAY_SAMPLES = 24000;  // 500ms at 48kHz (~192KB total)
   
-  float* delayBufferL;
-  float* delayBufferR;
+  float delayBufferL[MAX_DELAY_SAMPLES];
+  float delayBufferR[MAX_DELAY_SAMPLES];
   int writeIndex;
   int delayLengthSamples;
   float sampleRate_;

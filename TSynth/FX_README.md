@@ -19,7 +19,7 @@ This FX framework adds real-time audio effects to TSynth with safe runtime switc
    - Thread-safe pointer swapping
 
 3. **Delay** - Stereo delay effect
-   - Preallocated circular buffers (2 seconds max)
+   - Static circular buffers (500ms max at 48kHz)
    - Amount parameter → Feedback (0.0 to 0.95)
    - Mix parameter → Wet/Dry (0.0 to 1.0)
    - Default delay time: 300ms
@@ -287,10 +287,10 @@ void updateControls() {
 
 ## Performance Notes
 
-- Delay effect uses ~768KB RAM for 2-second stereo buffers at 48kHz
+- Delay effect uses ~192KB RAM for 500ms stereo buffers at 48kHz (static allocation)
 - CPU usage: ~5-10% at 600MHz for Delay processing
 - Interrupt disable duration: < 10 CPU cycles for pointer swap
-- No heap allocation in audio thread
+- No heap allocation - uses static arrays for buffers
 
 ## License
 

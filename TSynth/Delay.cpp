@@ -6,27 +6,20 @@
 #include <algorithm>
 
 Delay::Delay() 
-  : delayBufferL(nullptr)
-  , delayBufferR(nullptr)
-  , writeIndex(0)
+  : writeIndex(0)
   , delayLengthSamples(0)
   , sampleRate_(44100.0f)
   , feedback_(0.5f)
   , mix_(0.5f)
   , delayMs_(300.0f)
 {
-  // Preallocate delay buffers (no dynamic allocation in audio thread)
-  delayBufferL = new float[MAX_DELAY_SAMPLES];
-  delayBufferR = new float[MAX_DELAY_SAMPLES];
-  
-  // Initialize buffers to silence
-  std::memset(delayBufferL, 0, sizeof(float) * MAX_DELAY_SAMPLES);
-  std::memset(delayBufferR, 0, sizeof(float) * MAX_DELAY_SAMPLES);
+  // Initialize buffers to silence (static arrays, no heap allocation)
+  std::memset(delayBufferL, 0, sizeof(delayBufferL));
+  std::memset(delayBufferR, 0, sizeof(delayBufferR));
 }
 
 Delay::~Delay() {
-  if (delayBufferL) delete[] delayBufferL;
-  if (delayBufferR) delete[] delayBufferR;
+  // No dynamic memory to free
 }
 
 void Delay::init(float sampleRate) {
@@ -57,7 +50,7 @@ void Delay::setMix(float mix) {
 }
 
 void Delay::process(float* buf, int numFrames) {
-  if (!delayBufferL || !delayBufferR || delayLengthSamples < 1) {
+  if (delayLengthSamples < 1) {
     return;  // Safety check
   }
   
