@@ -15,7 +15,8 @@ How to integrate in code:
 - Read pots (ADC) and call:
   FXManager::setAmount(potA_normalized); // 0.0 .. 1.0
   FXManager::setMix(potB_normalized);    // 0.0 .. 1.0
-- Settings menu includes an "FX" option to pick Chorus/Delay/Off (currently global in-memory). When changed via Settings, FXManager will be switched automatically.
+- Settings menu includes an "FX" option to pick Chorus/Delay/Off. When changed via Settings, FXManager will be switched automatically.
 
 Persistence:
-- FX type is kept in-memory. Replace storeGlobalFXType() with your project's persistence API to save/restore across restarts.
+- FX type is stored in EEPROM at address EEPROM_FX_TYPE (13) and persists across restarts.
+- The FX type is automatically loaded from EEPROM on first access via getGlobalFXType().
