@@ -13,6 +13,7 @@
 #define EEPROM_AMP_ENV 10
 #define EEPROM_FILT_ENV 11
 #define EEPROM_GLIDE_SHAPE 12
+#define EEPROM_FX_TYPE 13
 
 FLASHMEM void storeGlideShape(byte type){
   EEPROM.update(EEPROM_GLIDE_SHAPE, type);
@@ -143,4 +144,14 @@ FLASHMEM boolean getVUEnable() {
 
 FLASHMEM void storeVUEnable(byte VUEnable){
   EEPROM.update(EEPROM_VU_ENABLE, VUEnable);
+}
+
+FLASHMEM uint8_t getFXType() {
+  byte fx = EEPROM.read(EEPROM_FX_TYPE);
+  if (fx > 2) return 0; //If EEPROM has no FX type stored, default to Chorus
+  return fx;
+}
+
+FLASHMEM void storeFXType(byte fxType){
+  EEPROM.update(EEPROM_FX_TYPE, fxType);
 }

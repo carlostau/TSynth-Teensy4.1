@@ -1,5 +1,6 @@
 #include "VoiceGroup.h"
 #include "SettingsService.h"
+#include "FXSettings.h"
 
 void settingsMIDICh(int index, const char * value);
 void settingsVelocitySens(int index, const char * value);
@@ -17,6 +18,7 @@ void settingsMonophonic(int index, const char * value);
 void settingsAmpEnv(int index, const char *value);
 void settingsFiltEnv(int index, const char *value);
 void settingsGlideShape(int index, const char *value);
+void settingsFX(int index, const char * value);
 
 int currentIndexMIDICh();
 int currentIndexVelocitySens();
@@ -34,9 +36,14 @@ int currentIndexMonophonicMode();
 int currentIndexAmpEnv();
 int currentIndexFiltEnv();
 int currentIndexGlideShape();
+int currentIndexFX();
 
 FLASHMEM int currentIndexGlideShape() {
   return glideShape;
+}
+
+FLASHMEM int currentIndexFX() {
+  return (int)getGlobalFXType();
 }
 
 FLASHMEM void settingsGlideShape(int index, const char * value) {
@@ -47,6 +54,17 @@ FLASHMEM void settingsGlideShape(int index, const char * value) {
     global.Oscillators[i].glide_.setMode(glideShape);
   }
   storeGlideShape(glideShape); 
+}
+
+FLASHMEM void settingsFX(int index, const char * value) {
+  if (strcmp(value, "Chorus") == 0) {
+    setGlobalFXType(FX_CHORUS);
+  } else if (strcmp(value, "Delay") == 0) {
+    setGlobalFXType(FX_DELAY);
+  } else {
+    setGlobalFXType(FX_OFF);
+  }
+  storeGlobalFXType(getGlobalFXType());
 }
 
 FLASHMEM int currentIndexAmpEnv() {
@@ -319,4 +337,5 @@ FLASHMEM void setUpSettings() {
   settings::append(settings::SettingsOption{"Oscilloscope", {"Off", "On", "\0"}, settingsScopeEnable, currentIndexScopeEnable});
   settings::append(settings::SettingsOption{"VU Meter", {"Off", "On", "\0"}, settingsVUEnable, currentIndexVUEnable});
   settings::append(settings::SettingsOption{"Bass Enh.", {"Off", "On", "\0"}, settingsBassEnhanceEnable, currentIndexBassEnhanceEnable});
+  settings::append(settings::SettingsOption{"FX", {"Chorus", "Delay", "Off", "\0"}, settingsFX, currentIndexFX});
 }
